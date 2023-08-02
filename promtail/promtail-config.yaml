@@ -1,0 +1,59 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+# local machine logs
+scrape_configs:
+  - job_name: system
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: varlogs
+          __path__: /var/log/*log
+# docker logs
+# scrape_configs:
+#   - job_name: custom_logs
+#     static_configs:
+#       - targets:
+#           - localhost
+#         labels:
+#           job: my_custom_logs
+#     pipeline_stages:
+#       - docker: {}
+#     positions:
+#       filename: /var/lib/promtail/positions.yml
+#     relabel_configs:
+#       - source_labels: [__path__]
+#         regex: /path/to/your/custom.log
+#         target_label: __path__
+#         replacement: /var/lib/docker/containers/*/*-json.log
+
+# scrape_configs:
+#   - job_name: system
+#     pipeline_stages:
+#       - docker: {}
+#     static_configs:
+#       - labels:
+#           job: docker
+#           __path__: /var/lib/docker/containers/*/*-json.log
+# scrape_configs:
+#   - job_name: docker-containers
+#     metrics_path: /metrics
+#     docker_sd_configs:
+#       - host: "unix:///var/run/docker.sock"
+#     relabel_configs:
+#       - source_labels: [__address__]
+#         regex: '(.*):.*'
+#         target_label: instance
+#         replacement: '${1}'
+#       - source_labels: [__container_label_com_example_project]
+#         regex: (.*)
+#         target_label: job_name
+#         replacement: '$1'
