@@ -89,4 +89,9 @@ volumes:
 ```
 
 where,
-LOKI_URL is the url of running loki.
+LOKI_URL is the url of running loki. Example: http://localhost:3100/loki/api/v1/push
+
+
+## Testing Example
+
+Envionment: [Log Montioring Test.mp4](example/log-monitor.mp4)
